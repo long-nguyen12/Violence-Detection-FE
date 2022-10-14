@@ -45,7 +45,7 @@ function CameraDetail({ myInfo }) {
   });
   const [loadingCapture, setLoadingCapture] = useState(false);
 
-  const { sendJsonMessage, getWebSocket } = useWebSocket("ws://localhost:8008/ws?id=1", {
+  const { sendMessage, getWebSocket } = useWebSocket("ws://localhost:8008/ws/1", {
     onOpen: () => console.log("WebSocket connection opened."),
     onClose: () => console.log("WebSocket connection closed."),
     shouldReconnect: (closeEvent) => true,
@@ -57,7 +57,7 @@ function CameraDetail({ myInfo }) {
     getWebSocket();
   }, []);
 
-  async function processMessages(event){
+  async function processMessages(event) {
     let image = document.getElementById("frame");
     image.src = URL.createObjectURL(event.data);
   }
@@ -66,22 +66,10 @@ function CameraDetail({ myInfo }) {
     setLoading(true);
     const apiResponse = await getCameraById(id);
     if (apiResponse) {
-      setDataCamera(apiResponse?.data?.camera);
-      runStream(apiResponse?.data?.camera?.ws_url);
+      setDataCamera(apiResponse?.data);
+      runStream(apiResponse?.data?.ws_url);
     }
     setLoading(false);
-  }
-
-  async function getDataCapture() {
-    setLoadingCapture(true);
-    let query = {
-      limit: pageSizeNumber + `&count=1&img_type=capture&skip=${(filterSelected.page - 1) * pageSizeNumber}`,
-    };
-    const apiResponse = await getCameraFilterAll(query);
-    if (apiResponse) {
-      setLoadingCapture(false);
-      setArrImg(apiResponse);
-    }
   }
 
   function runStream(URL) {
@@ -97,63 +85,27 @@ function CameraDetail({ myInfo }) {
     };
     const apiResponse = await updateCamera(stateCreateCamera.createCameraSelected.idcameras, formData);
     if (apiResponse) {
-      setDataCamera(apiResponse.camera);
+      setDataCamera(apiResponse);
       setStateCreateCamera({ isShowModal: false, createCameraSelected: null });
       toast(CONSTANTS.SUCCESS, `Cập nhật camera thành công`);
     }
   }
 
-  async function takeQuickPhoto(image) {
-    if (image === undefined) return;
-    let indexPost = 0;
-    setLoadingCapture(true);
-    for (const item of image) {
-      const dataImage = {
-        data: {
-          imgBase64: item,
-        },
-      };
-      const api = await createCapture(dataImage);
-      if (api) {
-        indexPost += 1;
-      }
-      if (indexPost === 10) {
-        await getDataCapture();
-      }
-    }
-  }
-
-  async function takePhoto(image) {
-    if (image === undefined) return;
-    setLoadingCapture(true);
-    const dataImage = {
-      data: {
-        imgBase64: image,
-      },
-    };
-    const api = await createCapture(dataImage);
-    if (api) {
-      await getDataCapture();
-    }
-  }
-
-  function _handleDeleteImage() {
-    const filtered = arrImg.filter(function (item, index) {
-      return index !== stateImgDetail?.id;
-    });
-    setArrImg([...filtered]);
-    setStateImgDetail({ isShowModal: false, imgSelected: null, id: "" });
-    toast(CONSTANTS.SUCCESS, "Xóa ảnh thành công");
-  }
-
   return (
     <>
       <CustomBreadcrumb breadcrumbLabel="Chi tiết Camera">
-        <Button type="primary" icon={<i className="fa fa-arrow-left mr-1" />} onClick={() => history.goBack()}>
+        <Button
+          type="primary"
+          icon={<i className="fa fa-arrow-left mr-1" />}
+          onClick={() => {
+            history.goBack();
+            sendMessage("DISCONNECT");
+          }}
+        >
           Quay lại
         </Button>
       </CustomBreadcrumb>
-      <div className="site-layout-background" style={{paddingBottom: 12}}>
+      <div className="site-layout-background" style={{ paddingBottom: 12 }}>
         <Loading active={loading}>
           {dataCamera && (
             <>
@@ -168,13 +120,13 @@ function CameraDetail({ myInfo }) {
                     </div>
                   </div>
                 </Col>
-                <Col xs={4}>
+                {/* <Col xs={4}>
                   <ActionCell
                     value={dataCamera}
                     handleEdit={() => setStateCreateCamera({ isShowModal: true, createCameraSelected: dataCamera })}
                     allowDelete={false}
                   />
-                </Col>
+                </Col> */}
               </Row>
             </>
           )}
@@ -203,16 +155,6 @@ function CameraDetail({ myInfo }) {
         handleOk={handleCreateCamera}
         handleCancel={() => setStateCreateCamera({ isShowModal: false, createCameraSelected: null })}
         createCameraSelected={stateCreateCamera.createCameraSelected}
-      />
-
-      <ImageDetail
-        style={{ height: "100%" }}
-        stateImgDetail={stateImgDetail}
-        imageId={stateImgDetail?.id}
-        imageData={arrImg}
-        setStateImgDetail={setStateImgDetail}
-        handleDeleteImage={_handleDeleteImage}
-        filterSelected={filterSelected}
       />
     </>
   );

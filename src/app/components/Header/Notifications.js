@@ -11,7 +11,6 @@ import { getAllNotification } from '@app/services/Notification';
 import { cloneObj, convertSnakeCaseToCamelCase, formatTimeDate } from '@app/common/functionCommons';
 
 import Notification from '@components/Notification/Notification';
-import THINKLABS from '@assets/images/logo/THINKLABS-LOGO.svg';
 import NOTIFICATION from '@assets/images/icon/notification.svg';
 import STAR_UNREAD from '@assets/images/icon/star-unread.svg';
 import STAR_READ from '@assets/images/icon/star-read.svg';
@@ -152,12 +151,10 @@ function Notifications({ history, myInfo, token, ...props }) {
     const title = newNotification.title ? newNotification.title : 'Thông báo mới';
     const body = newNotification.content;
     const tag = newNotification._id;
-    const icon = THINKLABS;
 
     const options = {
       tag: tag,
       body: body,
-      icon: icon,
       data: newNotification,
       lang: 'vi',
       dir: 'ltr',

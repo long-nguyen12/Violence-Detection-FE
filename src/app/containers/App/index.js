@@ -1,12 +1,16 @@
-import {Layout} from "antd";
-import React, {useEffect, useState} from "react";
-import {connect} from "react-redux";
-import {Switch, withRouter} from "react-router-dom";
+import React, { Suspense, useEffect, useState } from "react";
+import { connect } from "react-redux";
+import { Switch, withRouter } from "react-router-dom";
+import { Layout } from "antd";
+import Cookies from "js-cookie";
 
 import Routes from "@app/router/Routes";
+import LoginRoutes from "@app/router/LoginRoutes";
+import Loading from "@components/Loading";
 import HeaderMenu from "@components/Header/HeaderMenu";
 
-import {CONSTANTS} from "@constants";
+import { URL } from "@url";
+import { CONSTANTS } from "@constants";
 
 import * as app from "@app/store/ducks/app.duck";
 import * as user from "@app/store/ducks/user.duck";
@@ -17,14 +21,35 @@ const { Footer, Content } = Layout;
 function App({ isLoading, siderCollapsed, token, history, myInfo, ...props }) {
   const [isBroken, setBroken] = useState(false);
   const [isShowDrawer, setShowDrawer] = useState(false);
-
-  useEffect(() => {}, []);
+  useEffect(() => {
+    props.getToken();
+    handleLogoutAllTab();
+  }, []);
 
   useEffect(() => {
     if (token && token !== CONSTANTS.INITIAL) {
       props.requestUser(history);
     }
   }, [token]);
+
+  function handleLogoutAllTab() {
+    window.addEventListener(
+      "storage",
+      (event) => {
+        if (event.storageArea === localStorage) {
+          let isLogout = localStorage.getItem(window.location.host + "logout");
+          if (isLogout) {
+            props.clearToken();
+          } else {
+            const cookiesToken = Cookies.get("token");
+            props.setToken(cookiesToken);
+            history.replace(URL.MENU.DASHBOARD);
+          }
+        }
+      },
+      false
+    );
+  }
 
   function onBreakpoint(broken) {
     setBroken(broken);
@@ -37,6 +62,17 @@ function App({ isLoading, siderCollapsed, token, history, myInfo, ...props }) {
     } else {
       props.toggleSider(!siderCollapsed);
     }
+  }
+
+  if (token === CONSTANTS.INITIAL) return null;
+
+  const isResetPassword = URL.RESET_PASSWORD === history?.location?.pathname;
+  if (isResetPassword) {
+    return (
+      <Suspense fallback={<Loading />}>
+        <LoginRoutes />
+      </Suspense>
+    );
   }
 
   return (

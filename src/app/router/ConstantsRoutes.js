@@ -1,7 +1,7 @@
 import React, {lazy} from 'react';
 
 import {
-  SettingOutlined,
+  WarningOutlined,
   VideoCameraOutlined
 } from '@ant-design/icons';
 import {URL} from '@url';
@@ -15,7 +15,7 @@ export const ConstantsRoutes = [
     path: URL.MENU.THONGBAO,
     menuName: 'Thông báo',
     component: ThongBao,
-    icon: <SettingOutlined/>,
+    icon: <WarningOutlined />,
   },
   {
     path: URL.MENU.CAMERA,

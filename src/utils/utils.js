@@ -11,6 +11,12 @@ export function setupAxios(axios, store) {
   let countApiResponse = 0;
   let isRefreshToken = false;
 
+  function forceLogout() {
+    toast(CONSTANTS.WARNING, "Phiên đăng nhập đã hết hạn", true);
+    dispatch(app.actions.clearToken());
+    throw new axios.Cancel(CONSTANTS.CANCEL);
+  }
+
   axios.interceptors.request.use(
     async config => {
       if (!config.hasOwnProperty('loading')) {
@@ -45,14 +51,18 @@ export function setupAxios(axios, store) {
           if (dataAccessToken) {
             dispatch(app.actions.setToken(dataAccessToken));
           }
-          const authToken = Cookies.get('accessToken');
-          config.headers = { 'x-access-token': authToken};
+          const authToken = Cookies.get('token');
+          config.headers = { 'x-access-token': authToken };
           return config;
         } else {
           throw new axios.Cancel(CONSTANTS.CANCEL);
         }
+      } else {
+        if (!checkTokenExp(authToken)) {
+          forceLogout();
+        }
       }
-      config.headers = { 'x-access-token': authToken, };
+      config.headers = { 'Authorization': 'Bearer ' + authToken };
       if (!isLoading && countApiRequest !== countApiResponse) {
         dispatch(app.actions.toggleLoading(true));
       }

@@ -27,7 +27,16 @@ export function deleteCamera(id, id_user) {
 }
 
 export function updateCamera(id, data) {
-  return updateBase(API.UPDATE_CAMERA.format(id), data);
+  return axios
+    .put(API.UPDATE_CAMERA.format(id), data)
+    .then((response) => {
+      if (response.status === 200) return response;
+      return null;
+    })
+    .catch((err) => {
+      renderMessageError(err);
+      return null;
+    });
 }
 
 export function getCameraById(id) {

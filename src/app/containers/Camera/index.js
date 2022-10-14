@@ -96,9 +96,27 @@ function Camera({ myInfo }) {
         //   handleEdit={() => setStateCreateCamera({ isShowModal: true, createCameraSelected: value })}
         //   handleDelete={handleDeleteCamera}
         // />
-        <Button type="primary" onClick={handleShowModalCreateCamera}>
-          Xem
-        </Button>
+        <div>
+          <Link
+            to={{
+              pathname: "/camera/" + value?.idcameras,
+              aboutProps: {
+                id: value.idcameras,
+                name: value.camera_name,
+              },
+            }}
+          >
+            <Button type="primary" style={{ marginRight: 10 }}>
+              Xem
+            </Button>
+          </Link>
+          <Button
+            type="primary" ghost
+            onClick={() => setStateCreateCamera({ isShowModal: true, createCameraSelected: value })}
+          >
+            Sửa
+          </Button>
+        </div>
       ),
       fixed: "right",
       width: "15%",
@@ -120,10 +138,10 @@ function Camera({ myInfo }) {
       }
     }
     if (type === CONSTANTS.UPDATE) {
-      apiResponse = await updateCamera(stateCreateCamera.createCameraSelected._id, formData);
+      apiResponse = await updateCamera(stateCreateCamera.createCameraSelected.idcameras, formData);
       if (apiResponse) {
         const docs = dataCamera.map((doc) => {
-          if (doc._id === apiResponse?.data?._id) {
+          if (doc.idcameras === apiResponse?.data?.idcameras) {
             doc = apiResponse?.data;
           }
           return doc;

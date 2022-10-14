@@ -1,19 +1,14 @@
-import React from 'react';
+import React from "react";
 
-import './AuthBase.scss';
-
-import LOGO_VERTICAL from '@assets/images/logo/THINKLABS-LOGO.svg';
+import "./AuthBase.scss";
 
 function AuthBase({ children }) {
-
-  return <div id="login">
-    <div className="login-form">
-      <div style={{ textAlign: 'center' }}>
-        <img alt="" src={LOGO_VERTICAL}/>
-      </div>
-      {children}
+  return (
+    <div id="login">
+      <div className="login-form">{children}</div>
     </div>
-  </div>;
+  );
 }
 
-export default (AuthBase);
+export default AuthBase;
+

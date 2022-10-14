@@ -1,5 +1,5 @@
 export const API = {
-  LOGIN: '/backend/api/auth/signin',
+  LOGIN: '/backend/api/user/login',
   USERS: '/api/users',
   USER_DA_XOA: '/api/users/daxoa',
   USER_DA_XOA_ID: '/api/users/daxoa/{0}',

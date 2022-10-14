@@ -89,7 +89,7 @@ function CreateCamera({
             layoutCol={layoutCol}
             labelCol={labelCol}
             type={CONSTANTS.TEXT}
-            rules={[RULES.REQUIRED, RULES.URL_FORMAT]}
+            rules={[RULES.REQUIRED]}
             form={formCreateDataset}
           />
         </Form>

@@ -37,11 +37,6 @@ function Login({ history, isLoading, ...props }) {
         <Button type="primary" htmlType="submit" loading={isLoading}>Đăng nhập</Button>
       </Row>
     </Form>
-    {/*<div className="mt-2">
-      <Link to={URL.FORGET_PASSWORD}>
-        Quên mật khẩu?
-      </Link>
-    </div>*/}
   </AuthBase>;
 }
 

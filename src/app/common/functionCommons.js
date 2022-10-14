@@ -8,7 +8,7 @@ import { DownloadOutlined } from '@ant-design/icons';
 import { camelCase, isEqual, isObject, kebabCase, snakeCase, transform } from 'lodash';
 import queryString from 'query-string';
 
-import { CONSTANTS, KIEU_DU_LIEU, PAGINATION_CONFIG, TOAST_MESSAGE } from '@constants';
+import { CONSTANTS, PAGINATION_CONFIG, TOAST_MESSAGE } from '@constants';
 import { COLOR } from '../common/CanvasCommon/ColorConstants';
 
 export function cloneObj(input = {}) {
@@ -552,30 +552,6 @@ export function renderFilterTreeUnit(orgUnitTree, defaultValue) {
 
 export function checkLoaded() {
   return document.readyState === 'complete';
-}
-
-export function formatFormDataExtra(dataInput = {}, modelExtraData = []) {
-  const dataOutput = cloneObj(dataInput);
-  if (dataOutput.extra) {
-    Object.entries(dataOutput.extra).forEach(([key, value]) => {
-      const fieldType = modelExtraData.find((extra) => extra.fieldKey === key)?.fieldType;
-      switch (fieldType) {
-        case KIEU_DU_LIEU.VAN_BAN.code:
-          dataOutput[`extra-${key}`] = value;
-          break;
-        case KIEU_DU_LIEU.THOI_GIAN.code:
-          dataOutput[`extra-${key}`] = convertMoment(value);
-          break;
-        case KIEU_DU_LIEU.DANH_SACH.code:
-          dataOutput[`extra-${key}`] = value?._id || value;
-          break;
-        default:
-          break;
-      }
-    });
-    delete dataOutput.extra;
-  }
-  return dataOutput;
 }
 
 export function formatQueryDataExtra(dataInput) {

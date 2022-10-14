@@ -145,6 +145,10 @@ export const RULES = {
     pattern: "(http|ftp|https)://[\\w-]+(\\.[\\w-]+)+([\\w.,@?^=%&amp;:/~+#-]*[\\w@?^=%&amp;/~+#-])?",
     message: "Đường dẫn không phù hợp",
   },
+  URL_FORMAT_NUMBER: {
+    pattern: "^\\d$",
+    message: "",
+  },
 };
 
 export const PAGINATION_CONFIG = Object.assign(
@@ -177,3 +181,4 @@ export const SHARE_PERMISSION = {
   SHARE_VIEW: { code: "share_view", label: "Thêm sửa xóa ảnh của mình" },
   NO_SHARE: { code: "no_share", label: "Hủy chia sẻ" },
 };
+

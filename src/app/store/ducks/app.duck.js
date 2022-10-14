@@ -41,9 +41,8 @@ export const reducer = (state = initialState, action) => {
     }
     case actionTypes.SetToken: {
       const { data } = action.payload;
-      const token = data.accessToken;
+      const token = data.token;
       setCookieToken(token);
-      setRefreshToken(data.refreshToken);
       localStorage.removeItem(window.location.host + 'logout');
       return Object.assign({}, state, { token });
     }
@@ -73,6 +72,7 @@ export const actions = {
 export function* saga() {
   yield takeLatest(actionTypes.Login, function* loginSaga(data) {
     const dataResponse = yield login(data?.payload?.data);
+    console.log(dataResponse);
     if (dataResponse) {
       yield put(actions.setToken(dataResponse));
       data?.payload.history.push(URL.MENU.DATASET);
