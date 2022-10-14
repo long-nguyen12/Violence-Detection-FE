@@ -1,0 +1,27 @@
+import HomeIcon from '@components/Icons/HomeIcon';
+import OrgUnitIcon from '@components/Icons/OrgUnitIcon';
+import FileIcon from '@components/Icons/FileIcon';
+import CheckIcon from '@components/Icons/CheckIcon';
+import ChartIcon from '@components/Icons/ChartIcon';
+import TaskIcon from '@components/Icons/TaskIcon';
+import UserIcon from '@components/Icons/UserIcon';
+import ListIcon from '@components/Icons/ListIcon';
+import CalculatorIcon from '@components/Icons/CalculatorIcon';
+import ToolIcon from '@components/Icons/ToolIcon';
+import DroneIcon from '@components/Icons/DroneIcon';
+import SettingIcon from '@components/Icons/SettingIcon';
+
+export {
+  HomeIcon,
+  OrgUnitIcon,
+  FileIcon,
+  CheckIcon,
+  ChartIcon,
+  TaskIcon,
+  UserIcon,
+  ListIcon,
+  CalculatorIcon,
+  ToolIcon,
+  DroneIcon,
+  SettingIcon,
+};
