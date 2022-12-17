@@ -11,6 +11,7 @@ import { ConstantsRoutes } from '@app/router/ConstantsRoutes';
 import { checkPermission } from '@app/rbac/checkPermission';
 
 import '@src/app/common/prototype';
+import Video from '../containers/Video';
 
 function Routes({ token, myInfo, ...props }) {
 
@@ -60,7 +61,7 @@ function Routes({ token, myInfo, ...props }) {
             }
           }
         })}
-        <Route component={NoMatch}/>
+        <Route component={Video}/>
       </Switch>}
     </Suspense>
   );

@@ -152,7 +152,7 @@ function ThongBao({ myInfo }) {
     const apiResponse = await deleteNotification(data.id_notification);
     if (apiResponse) {
       await getDataNotification(pagination);
-      message.success("Xóa camera thành công!");
+      message.success("Xóa thông báo thành công!");
     }
   }
 

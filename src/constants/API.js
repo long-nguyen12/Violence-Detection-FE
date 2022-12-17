@@ -73,6 +73,8 @@ export const API = {
 
   ALL_CAMERA: '/backend/api/camera/all',
   CREATE_CAMERA: '/backend/api/camera',
+  CREATE_CAMERA: '/backend/api/camera',
+  CAMERA_ID: '/backend/api/camera/{0}',
   UPDATE_CAMERA: '/backend/api/camera/{0}',
   DELETE_CAMERA: '/backend/api/camera/{1}',
   STOP_STREAM: '/backend/api/camera/stream/stop-stream',
@@ -80,4 +82,8 @@ export const API = {
   CAMERA_CATE: '/backend/api/cameracate?count=1',
   CREATE_CAPTURE: '/backend/api/camera/capture_frame',
   FILTER_CAPTURE: '/backend/api/image',
+
+  ALL_VIDEO: '/backend/api/video/all',
+  CREATE_VIDEO: '/backend/api/video',
+  VIDEO_ID: '/backend/api/video/{0}',
 };

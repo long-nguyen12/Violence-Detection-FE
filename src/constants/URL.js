@@ -8,6 +8,7 @@ export const URL = {
     USER: "/nguoi-dung",
     KHOI_PHUC_TAI_KHOAN: "/khoi-phuc-tai-khoan",
     NGUOI_DUNG: "/nguoi-dung",
+    VIDEO: "/video"
   },
   CREATE_THIET_BI: "/them-thiet-bi",
   RESET_PASSWORD: "/reset-password",
@@ -19,6 +20,10 @@ export const URL = {
   DATASET_ID: "/dataset/{0}",
   DETAIL_IMG: "/dataset/{0}/images/{1}",
 
-  CAMERA_ID: "/camera/{0}",
+  ALL_VIDEO: "/video",
+  CREATE_VIDEO: "/video",
+  VIDEO_ID: "/video/{0}",
+
+  CAMERA_ID: "/camera/{0}"
 };
 
