@@ -7,21 +7,29 @@ import CreateCamera from "@containers/Camera/CreateCamera";
 import { Button, Image, message, Table, Tag } from "antd";
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import { Link } from "react-router-dom";
 import { deleteNotification, getAllNotification, updateNotification } from "../../services/Notification";
+import { NavLink, useHistory } from "react-router-dom";
 
 import AVATAR_DEFAULT from "@assets/images/no-image.png";
 import BASE_URL from "../../../constants/BASE_URL";
 import moment from "moment";
+import {
+  convertQueryToObject,
+  formatDateTime,
+  handleReplaceUrlSearch,
+  paginationConfig,
+} from "@app/common/functionCommons";
 
 function ThongBao({ myInfo }) {
-  const [pagination, setPagination] = useState({
-    current: 1,
-    pageSize: 10,
-    total: null,
-  });
+  let history = useHistory();
   const [loading, setLoading] = useState(false);
-  const [dataCamera, setDataCamera] = useState([]);
+  const [dataCamera, setDataCamera] = useState({
+    dataRes: [],
+    currentPage: 1,
+    pageSize: 10,
+    totalDocs: 0,
+    query: {},
+  });
   const [stateCreateCamera, setStateCreateCamera] = useState({
     isShowModal: false,
     createCameraSelected: null,
@@ -31,26 +39,31 @@ function ThongBao({ myInfo }) {
     getDataNotification();
   }, []);
 
-  async function getDataNotification() {
+  async function getDataNotification(
+    page = dataCamera.currentPage,
+    limit = dataCamera.pageSize,
+    query = dataCamera.query
+  ) {
+    page = page ? parseInt(page) : 1;
+    limit = limit ? parseInt(limit) : 10;
+    handleReplaceUrlSearch(history, page, limit, query);
     setLoading(true);
-    const apiResponse = await getAllNotification();
+    const apiResponse = await getAllNotification(page, limit, query);
     if (apiResponse) {
-      setDataCamera(apiResponse.items);
+      setDataCamera({
+        dataRes: apiResponse.items,
+        currentPage: page,
+        pageSize: limit,
+        totalDocs: apiResponse.total,
+        query: query,
+      });
     }
     setLoading(false);
   }
 
-  function handleShowModalCreateCamera(isShowModal, createCameraSelected = null) {
-    if (isShowModal) {
-      setStateCreateCamera({ isShowModal, createCameraSelected });
-    } else {
-      setStateCreateCamera({ ...stateCreateCamera, createCameraSelected });
-    }
+  async function handleChangePagination(current, pageSize) {
+    await getDataNotification(current, pageSize);
   }
-
-  const handleTableChange = async (pagination) => {
-    await getDataNotification(pagination);
-  };
 
   const columnsDataset = [
     {
@@ -102,11 +115,11 @@ function ThongBao({ myInfo }) {
       render: (value) => (
         <div>
           {value?.confirmed === 0 && (
-            <Button type="primary" style={{marginRight: 10}} onClick={(_) => handleConfirmNotification(value)}>
+            <Button type="primary" style={{ marginRight: 10 }} onClick={(_) => handleConfirmNotification(value)}>
               Xác nhận
             </Button>
           )}
-          <Button type="primary" style={{backgroundColor: 'red'}} onClick={(_) => handleDeleteCamera(value)}>
+          <Button type="primary" style={{ backgroundColor: "red" }} onClick={(_) => handleDeleteCamera(value)}>
             Xoá
           </Button>
         </div>
@@ -151,16 +164,16 @@ function ThongBao({ myInfo }) {
   async function handleDeleteCamera(data) {
     const apiResponse = await deleteNotification(data.id_notification);
     if (apiResponse) {
-      await getDataNotification(pagination);
-      message.success("Xóa camera thành công!");
+      await handleChangePagination();
+      message.success("Xóa thông báo thành công!");
     }
   }
 
   async function handleConfirmNotification(data) {
     const apiResponse = await updateNotification(data.id_notification);
     if (apiResponse) {
-      await getDataNotification(pagination);
-      message.success("Xác nhận thành công!");
+      await handleChangePagination();
+      message.success("Xác nhận thông báo thành công!");
     }
   }
 
@@ -183,9 +196,8 @@ function ThongBao({ myInfo }) {
           size="small"
           style={{ width: "100%" }}
           columns={columnsDataset}
-          dataSource={dataCamera}
-          pagination={pagination}
-          onChange={handleTableChange}
+          dataSource={dataCamera.dataRes}
+          pagination={paginationConfig(handleChangePagination, dataCamera)}
           scroll={{ x: 1200 }}
         />
       </Loading>

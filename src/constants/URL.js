@@ -8,6 +8,7 @@ export const URL = {
     USER: "/nguoi-dung",
     KHOI_PHUC_TAI_KHOAN: "/khoi-phuc-tai-khoan",
     NGUOI_DUNG: "/nguoi-dung",
+    VIDEO: "/video",
   },
   CREATE_THIET_BI: "/them-thiet-bi",
   RESET_PASSWORD: "/reset-password",
